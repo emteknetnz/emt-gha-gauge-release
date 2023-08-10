@@ -1,49 +1,9 @@
 name: Gauge release
 description: Gauge if should do a patch release
 
-# inputs:
-#   composer_install:
-#     type: boolean
-#     required: false
-#     default: false
-#   # extra jobs must be multi-line string, as there's no support for type: array for inputs
-#   extra_jobs:
-#     type: string
-#     required: false
-#     default: ''
-#   dynamic_matrix:
-#     type: boolean
-#     default: true
-#   # simple matrix will only run a single job with the lowest supported PHP and mysql versions instead of a full matrix
-#   simple_matrix:
-#     type: boolean
-#     default: false
-#   endtoend:
-#     type: boolean
-#     default: true
-#   # this option is intended only for community modules
-#   # modules on silverstripe account will ignore this value and always run codecov
-#   phpcoverage:
-#     type: boolean
-#     default: false
-#   # this option is specifically for turning off codecov on modules on the silverstripe account
-#   # use this if there are something like segfaults during a codecov run
-#   phpcoverage_force_off:
-#     type: boolean
-#     default: false
-#   phplinting:
-#     type: boolean
-#     default: true
-#   phpunit:
-#     type: boolean
-#     default: true
-#   js:
-#     type: boolean
-#     default: true
-
 outputs:
   gauge-release:
-    description: Whether should do a release
+    description: Whether to do a release
     value: ${{ steps.gauge-release.outputs.do_release }}
   next-tag:
     description: The patch tag to release
