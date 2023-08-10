@@ -1,18 +1,23 @@
 name: Gauge release
 description: Gauge if should do a patch release
 
+inputs:
+  latest_local_sha:
+    description: The latest local sha
+    required: true
+    type: string
+
 outputs:
-  gauge-release:
+  do_release:
     description: Whether to do a release
     value: ${{ steps.gauge-release.outputs.do_release }}
-  next-tag:
+  next_tag:
     description: The patch tag to release
     value: ${{ steps.gauge-release.outputs.next_tag }}
 
 runs:
   using: composite
   steps:
-
     - name: Gauge release
       id: gauge-release
       shell: bash
@@ -20,23 +25,23 @@ runs:
         GITHUB_REPOSITORY: ${{ github.repository }}
         GITHUB_REF_NAME: ${{ github.ref_name }}
         GITHUB_SHA: ${{ github.sha }}
+        LATEST_LOCAL_SHA: ${{ inputs.latest_local_sha }}
       run: |
         DO_RELEASE=1
+
+        # Double check that LATEST_LOCAL_SHA matches GITHUB_SHA
+        if [[ $DO_RELEASE == "1" ]]; then
+          LATEST_LOCAL_SHA=$(git rev-parse HEAD)
+          if [[ $LATEST_LOCAL_SHA != $GITHUB_SHA ]]; then
+            echo "LATEST_LOCAL_SHA $LATEST_LOCAL_SHA does not match GITHUB_SHA $GITHUB_SHA"
+            DO_RELEASE=0
+          fi
+        fi
 
         # Must be on a minor branch to do a patch release
         if ! [[ $GITHUB_REF_NAME =~ ^[0-9]+\.[0-9]+$ ]]; then
           echo "Not patch releasing because not on a minor branch"
           DO_RELEASE=0
-        fi
-
-        # Double check we're on the latest local sha according to local git
-        if [[ $DO_RELEASE == "1" ]]; then
-          LATEST_LOCAL_SHA=$(git rev-parse HEAD)
-          echo "LATEST_LOCAL_SHA is $LATEST_LOCAL_SHA"
-          if [[ $LATEST_LOCAL_SHA != $GITHUB_SHA ]]; then
-            echo "LATEST_LOCAL_SHA does not match GITHUB_SHA $GITHUB_SHA"
-            DO_RELEASE=0
-          fi
         fi
 
         # Validate that this commit is that latest commit for the branch using GitHub API

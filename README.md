@@ -3,3 +3,7 @@
 Gauge whether should do a patch release
 
 Action is designed to be used only within gha-ci and gha-action-ci
+
+## Inputs
+
+latest_local_sha - @todo
