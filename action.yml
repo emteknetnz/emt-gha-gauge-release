@@ -31,7 +31,6 @@ runs:
 
         # Double check that LATEST_LOCAL_SHA matches GITHUB_SHA
         if [[ $DO_RELEASE == "1" ]]; then
-          LATEST_LOCAL_SHA=$(git rev-parse HEAD)
           if [[ $LATEST_LOCAL_SHA != $GITHUB_SHA ]]; then
             echo "LATEST_LOCAL_SHA $LATEST_LOCAL_SHA does not match GITHUB_SHA $GITHUB_SHA"
             DO_RELEASE=0
