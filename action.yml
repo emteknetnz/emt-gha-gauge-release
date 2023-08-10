@@ -13,13 +13,6 @@ runs:
   using: composite
   steps:
 
-      - name: Output latest SHA
-        id: output-sha
-        run: |
-          LATEST_LOCAL_SHA=$(git rev-parse HEAD)
-          echo "LATEST_LOCAL_SHA is $LATEST_LOCAL_SHA"
-          echo "latest_local_sha=$LATEST_LOCAL_SHA" >> $GITHUB_OUTPUT
-
     - name: Gauge release
       id: gauge-release
       shell: bash
